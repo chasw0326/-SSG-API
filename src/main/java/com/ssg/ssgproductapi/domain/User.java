@@ -38,5 +38,16 @@ public class User extends AuditingCreateUpdateEntity {
     @Enumerated(EnumType.STRING)
     private UserState userState;
 
+    public void addUserRole(UserType userType) {
+        roleSet.add(userType);
+    }
+
+    public void updatePassword(String password){
+        this.password = password;
+    }
+
+    public void updateUserState(UserState userState) { this.userState = userState; }
+
+    public void updateName(String name) { this.name = name; }
 
 }
