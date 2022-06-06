@@ -26,7 +26,9 @@ public class Product extends AuditingCreateUpdateEntity {
 
     private int discountedPrice;
 
-    private short access;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserType authority;
 
     private LocalDateTime startedAt;
 
@@ -41,13 +43,25 @@ public class Product extends AuditingCreateUpdateEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Seller seller;
 
-    @Builder
-    private Product(String name, String description, int fullPrice, short access,
-                    LocalDateTime startedAt, LocalDateTime endAt){
+    public void updateProduct(String name, String description, int fullPrice, int discountedPrice, UserType userType,
+                              LocalDateTime startedAt, LocalDateTime endAt) {
         this.name = name;
         this.description = description;
         this.fullPrice = fullPrice;
-        this.access = access;
+        this.discountedPrice = discountedPrice;
+        this.authority = userType;
+        this.startedAt = startedAt;
+        this.endAt = endAt;
+    }
+
+    @Builder
+    private Product(String name, String description, int fullPrice, UserType authority,
+                    LocalDateTime startedAt, LocalDateTime endAt){
+        this.name = name;
+        this.description = description;
+        this.discountedPrice = fullPrice;
+        this.fullPrice = fullPrice;
+        this.authority = authority;
         this.startedAt = startedAt;
         this.endAt = endAt;
     }
