@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
         String encPassword = passwordEncoder.encode(rawPassword);
         user.updatePassword(encPassword);
-        user.addUserRole(UserType.일반);
+        user.addUserRole(UserType.일반회원);
         userRepository.save(user);
         return user.getId();
     }
