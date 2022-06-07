@@ -39,9 +39,17 @@ public class Product extends AuditingCreateUpdateEntity {
     private Promotion promotion;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Seller seller;
+    private User user;
+
+    public void updateDiscountedPrice(int discountedPrice) {
+        this.discountedPrice = discountedPrice;
+    }
+
+    public void updatePromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
 
     public void updateProduct(String name, String description, int fullPrice, int discountedPrice, UserType userType,
                               LocalDateTime startedAt, LocalDateTime endAt) {
@@ -56,7 +64,7 @@ public class Product extends AuditingCreateUpdateEntity {
 
     @Builder
     private Product(String name, String description, int fullPrice, UserType authority,
-                    LocalDateTime startedAt, LocalDateTime endAt){
+                    LocalDateTime startedAt, LocalDateTime endAt, User user){
         this.name = name;
         this.description = description;
         this.discountedPrice = fullPrice;
@@ -64,5 +72,6 @@ public class Product extends AuditingCreateUpdateEntity {
         this.authority = authority;
         this.startedAt = startedAt;
         this.endAt = endAt;
+        this.user = user;
     }
 }

@@ -49,6 +49,20 @@ public class Promotion extends AuditingCreateUpdateEntity {
     @NotBlank(message = "프로모션 종료일은 필수 값입니다.")
     private LocalDateTime endAt;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User user;
+
+    public void updatePromotion(String name, String description, DiscountPolicy policy, int discountRate, LocalDateTime startedAt, LocalDateTime endAt) {
+        this.name = name;
+        this.description = description;
+        this.policy = policy;
+        this.discountRate = discountRate;
+        this.startedAt = startedAt;
+        this.endAt = endAt;
+    }
+
     @Builder
     private Promotion(String name, String description, DiscountPolicy policy, int discountRate, LocalDateTime startedAt, LocalDateTime endAt) {
         this.name = name;

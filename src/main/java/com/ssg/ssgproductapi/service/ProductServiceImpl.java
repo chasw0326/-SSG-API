@@ -3,6 +3,7 @@ package com.ssg.ssgproductapi.service;
 import com.ssg.ssgproductapi.domain.*;
 import com.ssg.ssgproductapi.dto.ProductDTO;
 import com.ssg.ssgproductapi.exception.custom.ForbiddenException;
+import com.ssg.ssgproductapi.exception.custom.InvalidArgsException;
 import com.ssg.ssgproductapi.exception.custom.NotFoundException;
 import com.ssg.ssgproductapi.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,18 +30,22 @@ public class ProductServiceImpl {
     public Product getProduct(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("can not find user by productId: " + productId));
-
     }
 
 
     @Transactional
     public void registerProduct(String name, String description, int fullPrice, UserType authority,
-                                String start, String end) {
+                                String start, String end, Long userId) {
 
+        User user = userService.getUser(userId);
         LocalDateTime startedAt = LocalDateTime.parse(start,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endAt = LocalDateTime.parse(end,
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        if (endAt.isBefore(startedAt)) {
+            throw new InvalidArgsException("종료시점이 시작시점보다 빠릅니다.");
+        }
 
         Product product = Product.builder()
                 .name(name)
@@ -49,7 +54,9 @@ public class ProductServiceImpl {
                 .authority(authority)
                 .startedAt(startedAt)
                 .endAt(endAt)
+                .user(user)
                 .build();
+
 
         productRepository.save(product);
     }
@@ -78,7 +85,7 @@ public class ProductServiceImpl {
                     .fullPrice(product.getFullPrice())
                     .createdAt(product.getCreatedAt())
                     .promotionId(product.getPromotion().getId())
-                    .sellerId(product.getSeller().getId())
+                    .sellerId(product.getUser().getId())
                     .name(product.getName())
                     .endAt(product.getEndAt())
                     .build());
@@ -92,7 +99,7 @@ public class ProductServiceImpl {
         // TODO: 프로모션 즉시조인으로 가져오는 쿼리로 가져올 것
         Product updatedProduct = this.getProduct(productId);
 
-        if (!updatedProduct.getSeller().getId().equals(userId)) {
+        if (!updatedProduct.getUser().getId().equals(userId)) {
             throw new ForbiddenException("수정 권한이 없습니다.");
         }
 
@@ -100,6 +107,7 @@ public class ProductServiceImpl {
         final String updatedDescription = StringUtils.isNotBlank(product.getDescription()) ? product.getDescription() : updatedProduct.getDescription();
         final int updatedFullPrice = ObjectUtils.isNotEmpty(product.getFullPrice()) ? product.getFullPrice() : updatedProduct.getFullPrice();
         final UserType updatedAuthority = ObjectUtils.isNotEmpty(product.getAuthority()) ? product.getAuthority() : updatedProduct.getAuthority();
+        // TODO: LocalDateTime parse
         final LocalDateTime updatedStartedAt = ObjectUtils.isNotEmpty(product.getStartedAt()) ? product.getStartedAt() : updatedProduct.getStartedAt();
         final LocalDateTime updatedEndAt = ObjectUtils.isNotEmpty(product.getEndAt()) ? product.getEndAt() : updatedProduct.getEndAt();
         int updatedDiscountedPrice = product.getFullPrice();
@@ -127,7 +135,7 @@ public class ProductServiceImpl {
     @Transactional
     public void deleteProduct(Long userId, Long productId) {
         Product product = this.getProduct(productId);
-        if (!product.getSeller().getId().equals(userId)) {
+        if (!product.getUser().getId().equals(userId)) {
             throw new ForbiddenException("삭제권한이 없습니다.");
         }
         productRepository.delete(product);

@@ -2,6 +2,7 @@ package com.ssg.ssgproductapi.domain;
 
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
@@ -32,5 +33,11 @@ public class AppliedPromotion extends AuditingCreateUpdateEntity {
     @JoinColumn(name = "promotion_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Promotion promotion;
+
+    @Builder
+    private AppliedPromotion(Product product, Promotion promotion) {
+        this.product = product;
+        this.promotion = promotion;
+    }
 
 }
