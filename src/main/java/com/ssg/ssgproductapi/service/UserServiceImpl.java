@@ -8,6 +8,7 @@ import com.ssg.ssgproductapi.exception.custom.AlreadyExistsException;
 import com.ssg.ssgproductapi.exception.custom.InvalidArgsException;
 import com.ssg.ssgproductapi.exception.custom.NotFoundException;
 import com.ssg.ssgproductapi.repository.UserRepository;
+import com.ssg.ssgproductapi.util.ValidateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,21 +22,29 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ValidateUtil validateUtil;
 
     @Override
     @Transactional
-    public Long signup(User user) {
-        final String email = user.getEmail();
+    public Long signup(String email, String name, String rawPassword, String userType) {
         if (userRepository.existsByEmail(email)) {
             log.warn("Email already exists input: {}", email);
             throw new AlreadyExistsException("Email already exists input: " + email);
         }
-        String rawPassword = user.getPassword();
         validatePassword(rawPassword);
-
         String encPassword = passwordEncoder.encode(rawPassword);
-        user.updatePassword(encPassword);
+        User user = User.builder()
+                .email(email)
+                .name(name)
+                .password(encPassword)
+                .build();
+
         user.addUserRole(UserType.일반회원);
+        if (userType.equals(UserType.기업회원.toString())){
+            user.addUserRole(UserType.기업회원);
+        }
+
+        validateUtil.validate(user);
         userRepository.save(user);
         return user.getId();
     }
@@ -71,6 +80,7 @@ public class UserServiceImpl implements UserService {
     public void updateUser(Long userId, String name) {
         User user = this.getUser(userId);
         user.updateName(name);
+        validateUtil.validate(user);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.ssg.ssgproductapi.security.filter.ApiLoginFilter;
 import com.ssg.ssgproductapi.security.handler.LoginFailHandler;
 import com.ssg.ssgproductapi.security.service.SsgUserDetailsService;
 import com.ssg.ssgproductapi.security.util.JWTUtil;
+import com.ssg.ssgproductapi.util.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,6 +56,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public ApiCheckFilter apiCheckFilter() {
         return new ApiCheckFilter("/**", excludePaths, jwtUtil());
+    }
+
+    @Bean
+    public ValidateUtil validateUtil() {
+        return new ValidateUtil();
     }
 
     @Bean

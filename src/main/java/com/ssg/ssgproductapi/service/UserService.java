@@ -4,7 +4,7 @@ import com.ssg.ssgproductapi.domain.User;
 
 public interface UserService {
 
-    Long signup(User user);
+    Long signup(String email, String name, String rawPassword, String userType);
 
     void resign(Long userId);
 
