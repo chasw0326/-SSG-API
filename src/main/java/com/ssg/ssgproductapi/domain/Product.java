@@ -43,6 +43,8 @@ public class Product extends AuditingCreateUpdateEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+    public void updateFullPrice(int price) { this.fullPrice = price; }
+
     public void updateDiscountedPrice(int discountedPrice) {
         this.discountedPrice = discountedPrice;
     }
@@ -51,12 +53,10 @@ public class Product extends AuditingCreateUpdateEntity {
         this.promotion = promotion;
     }
 
-    public void updateProduct(String name, String description, int fullPrice, int discountedPrice, UserType userType,
+    public void updateProduct(String name, String description, UserType userType,
                               LocalDateTime startedAt, LocalDateTime endAt) {
         this.name = name;
         this.description = description;
-        this.fullPrice = fullPrice;
-        this.discountedPrice = discountedPrice;
         this.authority = userType;
         this.startedAt = startedAt;
         this.endAt = endAt;

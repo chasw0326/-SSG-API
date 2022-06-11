@@ -1,6 +1,7 @@
 package com.ssg.ssgproductapi.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,26 +32,25 @@ public class Promotion extends AuditingCreateUpdateEntity {
     private String name;
 
     @Column(length = 10, nullable = false)
-    @Length(max = 30, message = "프로모션명은 30자 이하여야 합니다.")
-    @NotBlank(message = "프로모션명은 필수 값입니다.")
+    @Length(max = 30, message = "프로모션 설명은 30자 이하여야 합니다.")
+    @NotBlank(message = "프로모션 설명은 필수 값입니다.")
     private String description;
 
     @Column(nullable = false)
-    @NotBlank(message = "할인정책은 필수 값입니다.")
     @Enumerated(EnumType.STRING)
     private DiscountPolicy policy;
 
     @Column(nullable = false)
-    @NotBlank(message = "할인율은 필수 값입니다.")
+    @NotNull(message = "할인율은 필수 값입니다.")
     private int discountRate;
 
+    @Column(length = 30, nullable = false)
     private LocalDateTime startedAt;
 
     @Column(length = 30, nullable = false)
-    @Length(max = 30, message = "프로모션 종료일은 필수 값입니다.")
-    @NotBlank(message = "프로모션 종료일은 필수 값입니다.")
     private LocalDateTime endAt;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -64,7 +66,8 @@ public class Promotion extends AuditingCreateUpdateEntity {
     }
 
     @Builder
-    private Promotion(String name, String description, DiscountPolicy policy, int discountRate, LocalDateTime startedAt, LocalDateTime endAt) {
+    private Promotion(User user, String name, String description, DiscountPolicy policy, int discountRate, LocalDateTime startedAt, LocalDateTime endAt) {
+        this.user = user;
         this.name = name;
         this.description = description;
         this.policy = policy;

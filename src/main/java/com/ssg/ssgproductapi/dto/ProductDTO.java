@@ -10,7 +10,7 @@ public class ProductDTO {
 
     @Getter
     @Builder
-    public static class userProduct {
+    public static class UserProduct {
 
         private Long id;
 

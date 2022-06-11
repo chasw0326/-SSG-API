@@ -36,7 +36,7 @@ public class SsgUserDetailsService implements UserDetailsService {
         return new AuthUserDTO(
                 user.getEmail(),
                 user.getPassword(),
-                user.getRoleSet().stream()
+                user.getUserType().stream()
                         .map(role-> new SimpleGrantedAuthority
                                 ("ROLE_"+role.name())).collect(Collectors.toSet()),
                 user.getId()
