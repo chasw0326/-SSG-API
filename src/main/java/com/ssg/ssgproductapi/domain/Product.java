@@ -18,10 +18,13 @@ public class Product extends AuditingCreateUpdateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
     private int fullPrice;
 
     private int discountedPrice;
@@ -30,12 +33,14 @@ public class Product extends AuditingCreateUpdateEntity {
     @Enumerated(EnumType.STRING)
     private UserType authority;
 
+    @Column(nullable = false)
     private LocalDateTime startedAt;
 
+    @Column(nullable = false)
     private LocalDateTime endAt;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "applied_promotion_id")
+    @JoinColumn(name = "promotion_id")
     private Promotion promotion;
 
     @OneToOne(fetch = FetchType.LAZY)

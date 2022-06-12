@@ -70,9 +70,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({SsgRuntimeException.class})
-    public ResponseEntity<?> clubRuntimeHandler(SsgRuntimeException ex){
+    public ResponseEntity<?> ssgRuntimeHandler(SsgRuntimeException ex){
         String message = ex.getMessage();
-        log.warn("ClubRuntimeException: {}", message);
+        log.warn("ssgRuntimeException: {}", message);
         return createErrorResponse(message, HttpStatus.BAD_REQUEST);
     }
 

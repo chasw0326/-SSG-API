@@ -2,6 +2,7 @@ package com.ssg.ssgproductapi.service;
 
 import com.ssg.ssgproductapi.domain.DiscountPolicy;
 import com.ssg.ssgproductapi.domain.Promotion;
+import com.ssg.ssgproductapi.dto.PromotionRespDTO;
 
 import java.util.List;
 
@@ -11,9 +12,11 @@ public interface PromotionService {
 
     Promotion getPromotion(Long promotionId);
 
-    void registerPromotion(Long userId, String name, String description, String policy, int discountRate, String start, String end);
+    void registerPromotion(Long userId, String name, String description, String policy, Integer discountRate, String start, String end);
 
-    void updatePromotion(Long userId, Long promotionId, String name, String description, String policy, int discountRate, String start, String end);
+    // DEPRECATED
+//    void updatePromotion(Long userId, Long promotionId, String name, String description, String policy, Integer discountRate, String start, String end);
 
-    List<Promotion> getMyPromotions(Long userId);
+    List<PromotionRespDTO.MyPromotion> getMyPromotions(Long userId);
+
 }

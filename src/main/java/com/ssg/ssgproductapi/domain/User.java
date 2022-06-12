@@ -29,6 +29,7 @@ public class User extends AuditingCreateUpdateEntity {
     private String name;
 
     @ElementCollection(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_type")
     private Set<UserType> userType = new HashSet<>();
 
     @Column(nullable = false)
