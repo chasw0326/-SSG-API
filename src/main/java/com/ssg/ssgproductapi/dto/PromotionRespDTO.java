@@ -1,18 +1,17 @@
 package com.ssg.ssgproductapi.dto;
 
 import com.ssg.ssgproductapi.domain.DiscountPolicy;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.validator.constraints.Length;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class PromotionDTO {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class PromotionRespDTO {
 
     @Getter
     @Builder
@@ -31,6 +30,8 @@ public class PromotionDTO {
         private LocalDateTime startedAt;
 
         private LocalDateTime endAt;
+
+        private List<Long> productIds;
 
     }
 }

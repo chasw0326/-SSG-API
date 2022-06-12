@@ -1,6 +1,7 @@
 package com.ssg.ssgproductapi.service;
 
 
+import com.google.common.base.Preconditions;
 import com.ssg.ssgproductapi.domain.User;
 import com.ssg.ssgproductapi.domain.UserState;
 import com.ssg.ssgproductapi.domain.UserType;
@@ -24,9 +25,15 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ValidateUtil validateUtil;
 
+
     @Override
     @Transactional
-    public Long signup(String email, String name, String rawPassword, String userType) {
+    public void signup(String email, String name, String rawPassword, String userType) {
+        Preconditions.checkNotNull(email, "email은 필수값 입니다.");
+        Preconditions.checkNotNull(name, "name은 필수값 입니다.");
+        Preconditions.checkNotNull(rawPassword, "password는 필수값 입니다.");
+        Preconditions.checkNotNull(userType, "userType은 필수값 입니다.");
+
         if (userRepository.existsByEmail(email)) {
             log.warn("Email already exists input: {}", email);
             throw new AlreadyExistsException("Email already exists input: " + email);
@@ -46,7 +53,6 @@ public class UserServiceImpl implements UserService {
 
         validateUtil.validate(user);
         userRepository.save(user);
-        return user.getId();
     }
 
     @Override
@@ -59,6 +65,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updatePassword(Long userId, String oldPw, String newPw, String checkPw) {
+        Preconditions.checkNotNull(userId, "userId은 필수값 입니다.");
+        Preconditions.checkNotNull(oldPw, "oldPw은 필수값 입니다.");
+        Preconditions.checkNotNull(newPw, "newPw은 필수값 입니다.");
+        Preconditions.checkNotNull(checkPw, "checkPw은 필수값 입니다.");
+
         User user = this.getUser(userId);
 
         if (!passwordEncoder.matches(oldPw, user.getPassword())) {
@@ -78,6 +89,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(Long userId, String name) {
+        Preconditions.checkNotNull(userId, "userId은 필수값 입니다.");
+        Preconditions.checkNotNull(name, "name은 필수값 입니다.");
         User user = this.getUser(userId);
         user.updateName(name);
         validateUtil.validate(user);
@@ -93,7 +106,7 @@ public class UserServiceImpl implements UserService {
     private void validatePassword(String password) {
         String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
         if (!password.matches(pattern)) {
-            throw new InvalidArgsException("비밀번호 형식을 확인하세요.");
+            throw new InvalidArgsException("비밀번호 형식을 확인하세요. (8~20자, 대문자, 소문자, 특수문자, 숫자 포함)");
         }
     }
 }

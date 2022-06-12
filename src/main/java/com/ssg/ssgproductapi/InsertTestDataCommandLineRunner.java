@@ -1,8 +1,7 @@
 package com.ssg.ssgproductapi;
 
 
-import com.ssg.ssgproductapi.domain.User;
-import com.ssg.ssgproductapi.service.AppliedPromotionService;
+import com.ssg.ssgproductapi.service.ApplyPromotionService;
 import com.ssg.ssgproductapi.service.ProductService;
 import com.ssg.ssgproductapi.service.PromotionService;
 import com.ssg.ssgproductapi.service.UserService;
@@ -21,7 +20,7 @@ public class InsertTestDataCommandLineRunner implements CommandLineRunner {
     private final UserService userService;
     private final ProductService productService;
     private final PromotionService promotionService;
-    private final AppliedPromotionService appliedPromotionService;
+    private final ApplyPromotionService appliedPromotionService;
 
 
     @Override
@@ -41,9 +40,6 @@ public class InsertTestDataCommandLineRunner implements CommandLineRunner {
         userService.signup("kim@ssg.com", "김구현", "ssgSSG123!@#", "일반회원");
     }
 
-//    String name, String description, int fullPrice, UserType authority,
-//    String start, String end, Long userId
-// yyyy-MM-dd HH:mm:ss
     private void insertProducts() {
 
         productService.registerProduct(2L, "구찌", "핸드백1", 880000,
@@ -85,36 +81,54 @@ public class InsertTestDataCommandLineRunner implements CommandLineRunner {
         productService.registerProduct(4L, "노스페이스", "백팩4", 3500000,
                 "일반회원", "2022-01-01 00:00:00","2022-12-31 23:59:59");
 
+        productService.registerProduct(5L, "맥북프로", "M1Pro 16Inch", 4000000,
+                "일반회원", "2022-01-01 00:00:00","2022-12-31 23:59:59");
     }
 
     private void insertPromotions() {
         //FLAT: 정액제, FIXED: 정률제
+        //1
         promotionService.registerPromotion(1L, "프로모션1", "여름할인", "FLAT",
-                10000, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+                100000000, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        //2
         promotionService.registerPromotion(1L, "프로모션2", "여름할인", "FLAT",
                 20000, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        //3
         promotionService.registerPromotion(2L, "프로모션3", "여름할인", "FIXED",
                 30, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        //4
         promotionService.registerPromotion(2L, "프로모션4", "여름할인", "FLAT",
                 40000, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        //5
         promotionService.registerPromotion(3L, "프로모션5", "여름할인", "FIXED",
                 20, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        //6
         promotionService.registerPromotion(3L, "프로모션6", "여름할인", "FIXED",
-                50, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+                30, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        //7
         promotionService.registerPromotion(4L, "프로모션7", "여름할인", "FLAT",
                 600000, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        //8
         promotionService.registerPromotion(4L, "프로모션8", "여름할인", "FIXED",
-                10, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+                40, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
 
         // 시간 체크용
-        promotionService.registerPromotion(5L, "프로모션1", "미래할인1", "FLAT",
+        promotionService.registerPromotion(5L, "프로모션9", "미래할인1", "FLAT",
                 5000, "2023-01-01 00:00:00", "2023-12-31 00:00:00");
-        promotionService.registerPromotion(5L, "프로모션1", "미래할인2", "FIXED",
+        promotionService.registerPromotion(5L, "프로모션10", "미래할인2", "FIXED",
                 80, "2023-01-01 00:00:00", "2023-12-31 00:00:00");
+
+        promotionService.registerPromotion(4L, "프로모션11", "여름할인", "FIXED",
+                40, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        promotionService.registerPromotion(4L, "프로모션12", "여름할인", "FLAT",
+                500000000, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+        promotionService.registerPromotion(4L, "프로모션13", "여름할인", "FLAT",
+                400000000, "2022-06-01 00:00:00", "2022-06-30 00:00:00");
+
     }
 
     private void insertAppliedPromotions() {
-        appliedPromotionService.applyPromotionToProduct(1L, 1L, new ArrayList<>(Arrays.asList(1L, 3L, 5L, 7L)));
+        appliedPromotionService.applyPromotionToProduct(1L, 1L, new ArrayList<>(Arrays.asList(1L, 3L, 9L, 7L)));
         appliedPromotionService.applyPromotionToProduct(1L, 2L, new ArrayList<>(Arrays.asList(10L, 12L, 14L, 16L)));
         appliedPromotionService.applyPromotionToProduct(2L, 3L, new ArrayList<>(Arrays.asList(15L, 13L, 11L, 9L)));
         appliedPromotionService.applyPromotionToProduct(2L, 4L, new ArrayList<>(Arrays.asList(4L, 8L, 12L, 16L)));
@@ -123,5 +137,9 @@ public class InsertTestDataCommandLineRunner implements CommandLineRunner {
         appliedPromotionService.applyPromotionToProduct(4L, 7L, new ArrayList<>(Arrays.asList(2L, 3L, 10L, 4L)));
         appliedPromotionService.applyPromotionToProduct(4L, 8L, new ArrayList<>(Arrays.asList(2L, 6L, 9L, 4L)));
         appliedPromotionService.applyPromotionToProduct(4L, 7L, new ArrayList<>(Arrays.asList(14L, 7L, 5L, 6L)));
+
+        appliedPromotionService.applyPromotionToProduct(4L, 11L, new ArrayList<>(List.of(17L)));
+        appliedPromotionService.applyPromotionToProduct(4L, 12L, new ArrayList<>(List.of(17L)));
+        appliedPromotionService.applyPromotionToProduct(4L, 13L, new ArrayList<>(List.of(17L)));
     }
 }

@@ -13,12 +13,12 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "applied_promotions",
+@Table(name = "apply_promotions",
         uniqueConstraints = {@UniqueConstraint(
                 name = "promotion_uk",
                 columnNames = {"product_Id", "promotion_Id"}
         )})
-public class AppliedPromotion extends AuditingCreateUpdateEntity {
+public class ApplyPromotion extends AuditingCreateUpdateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,6 @@ public class AppliedPromotion extends AuditingCreateUpdateEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,7 +34,7 @@ public class AppliedPromotion extends AuditingCreateUpdateEntity {
     private Promotion promotion;
 
     @Builder
-    private AppliedPromotion(Product product, Promotion promotion) {
+    private ApplyPromotion(Product product, Promotion promotion) {
         this.product = product;
         this.promotion = promotion;
     }
