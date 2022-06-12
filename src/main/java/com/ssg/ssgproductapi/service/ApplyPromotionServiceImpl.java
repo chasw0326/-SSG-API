@@ -22,17 +22,24 @@ public class ApplyPromotionServiceImpl implements ApplyPromotionService {
 
     private final PromotionServiceImpl promotionService;
     private final ProductRepository productRepository;
+    private final UserService userService;
     private final ApplyPromotionRepository appliedPromotionRepository;
     private final PromotionRepository promotionRepository;
     private final ValidateUtil validateUtil;
 
+    /**
+     * 프로모션을 상품에 적용
+     * @param userId
+     * @param promotionId
+     * @param productIds 상품 pk 리스트
+     */
     @Override
     @Transactional
     public void applyPromotionToProduct(Long userId, Long promotionId, List<Long> productIds) {
+
+        // 탈퇴한 회원인지 본인의 프로모션인지 체크
+        this.checkAuthAndValidUser(userId, promotionId);
         Promotion promotion = promotionService.getPromotion(promotionId);
-        if (!promotion.getUser().getId().equals(userId)) {
-            throw new ForbiddenException("권한이 없습니다.");
-        }
 
         LocalDateTime startedAt = promotion.getStartedAt();
         LocalDateTime endAt = promotion.getEndAt();
@@ -47,7 +54,11 @@ public class ApplyPromotionServiceImpl implements ApplyPromotionService {
         DiscountPolicy policy = promotion.getPolicy();
         int rate = promotion.getDiscountRate();
         for (Long productId : productIds) {
-            Product product = productRepository.getById(productId);
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new NotFoundException("can not find product by productId: " + productId));
+            if (appliedPromotionRepository.existsByProduct_IdAndPromotion_Id(productId, promotionId)){
+                continue;
+            }
             this.applyCheapestPromotion(product, rate, policy, promotion);
             ApplyPromotion appliedPromotion = ApplyPromotion.builder()
                     .product(product)
@@ -59,6 +70,10 @@ public class ApplyPromotionServiceImpl implements ApplyPromotionService {
         }
     }
 
+    /**
+     * 상품가격의 변경이 있을때 더 적합한 프로모션이 있는지 체크하기 위한 메서드
+     * @param productId
+     */
     @Override
     @Transactional
     public void dirtyCheckAppliedPromotion(Long productId) {
@@ -75,6 +90,13 @@ public class ApplyPromotionServiceImpl implements ApplyPromotionService {
         }
     }
 
+    /**
+     * 상품에 적용된 특정 프로모션 제거 <br>
+     * 프로모션이 삭제되는 것이 아니라, 상품에 적용된 프로모션을 제외
+     * @param userId
+     * @param productId
+     * @param promotionId
+     */
     @Override
     @Transactional
     public void deleteAppliedPromotion(Long userId, Long productId, Long promotionId) {
@@ -84,18 +106,23 @@ public class ApplyPromotionServiceImpl implements ApplyPromotionService {
         }
         ApplyPromotion appliedPromotion = appliedPromotionRepository.getByProduct_IdAndPromotion_Id(productId, promotionId);
         appliedPromotionRepository.delete(appliedPromotion);
+        // 제거 한 뒤 적합한 프로모션을 찾아서 상품에 등록
         this.dirtyCheckAppliedPromotion(productId);
     }
 
+    /**
+     * 프로모션 자체를 제거
+     * @param userId
+     * @param promotionId
+     */
     @Override
     @Transactional
     public void deletePromotion(Long userId, Long promotionId) {
         List<Product> products = productRepository.getAllByPromotion_Id(promotionId);
-        Promotion promotion = promotionService.getPromotion(promotionId);
-        if (!promotion.getUser().getId().equals(userId)) {
-            throw new ForbiddenException("권한이 없습니다.");
-        }
+        this.checkAuthAndValidUser(userId, promotionId);
 
+        // 삭제되는 프로모션이 적용된 상품들과의 관계를 다 끊고
+        // 적합한 프로모션을 찾아서 상품에 적용
         for (Product product : products) {
             product.updatePromotion(null);
             appliedPromotionRepository.deleteByProduct_IdAndPromotion_Id(product.getId(), promotionId);
@@ -105,7 +132,31 @@ public class ApplyPromotionServiceImpl implements ApplyPromotionService {
         promotionRepository.deleteById(promotionId);
     }
 
+    /**
+     * 권한, 탈퇴회원 체크
+     * @param userId
+     * @param promotionId
+     */
+    private void checkAuthAndValidUser(Long userId, Long promotionId) {
+        Promotion promotion = promotionService.getPromotion(promotionId);
+        if (!promotion.getUser().getId().equals(userId)) {
+            throw new ForbiddenException("권한이 없습니다.");
+        }
 
+        User user = userService.getUser(userId);
+        if (user.getUserState().equals(UserState.탈퇴)) {
+            throw new ForbiddenException("탈퇴한 회원입니다. input email: " + user.getEmail());
+        }
+    }
+
+    /**
+     * 프로모션을 제거하거나 상품가격이 변동되면 <br>
+     * 프로모션이 바뀔 수 있기 때문에 체크용 메서드
+     * @param product
+     * @param rate
+     * @param policy
+     * @param promotion
+     */
     private void applyCheapestPromotion(Product product, int rate, DiscountPolicy policy, Promotion promotion) {
         int fullPrice = product.getFullPrice();
         // 정액제

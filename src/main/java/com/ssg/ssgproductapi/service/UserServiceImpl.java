@@ -25,7 +25,13 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ValidateUtil validateUtil;
 
-
+    /**
+     * 회원가입
+     * @param email
+     * @param name
+     * @param rawPassword
+     * @param userType 일반회원, 기업회원
+     */
     @Override
     @Transactional
     public void signup(String email, String name, String rawPassword, String userType) {
@@ -55,6 +61,11 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    /**
+     * 유저를 탈퇴 상태로 만든다.<br>
+     * 추후에 일정기간 지나면 테이블에서도 삭제되게 하면 좋을 듯
+     * @param userId
+     */
     @Override
     @Transactional
     public void resign(Long userId) {
@@ -62,6 +73,13 @@ public class UserServiceImpl implements UserService {
         user.updateUserState(UserState.탈퇴);
     }
 
+    /**
+     * 비밀번호 변경
+     * @param userId
+     * @param oldPw 기존 비밀번호
+     * @param newPw 새 비밀번호
+     * @param checkPw 새 비밀번호 체크
+     */
     @Override
     @Transactional
     public void updatePassword(Long userId, String oldPw, String newPw, String checkPw) {
@@ -86,6 +104,11 @@ public class UserServiceImpl implements UserService {
         user.updatePassword(passwordEncoder.encode(newPw));
     }
 
+    /**
+     * 이름 수정
+     * @param userId
+     * @param name
+     */
     @Override
     @Transactional
     public void updateUser(Long userId, String name) {
@@ -103,6 +126,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new NotFoundException("can not find user by userId: " + userId));
     }
 
+    /**
+     * 비밀번호 강도 체크
+     * @param password
+     */
     private void validatePassword(String password) {
         String pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
         if (!password.matches(pattern)) {

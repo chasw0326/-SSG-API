@@ -8,10 +8,12 @@ import javax.validation.constraints.Pattern;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserDTO {
+public class UserReqDTO {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Signup {
 
         @NotBlank(message = "이메일은 필수값입니다.")
