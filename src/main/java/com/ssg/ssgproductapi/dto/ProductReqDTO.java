@@ -14,6 +14,8 @@ public class ProductReqDTO {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Register {
 
         @NotBlank(message = "상품명은 필수값 입니다.")
@@ -43,6 +45,8 @@ public class ProductReqDTO {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Update {
 
         @Builder.Default

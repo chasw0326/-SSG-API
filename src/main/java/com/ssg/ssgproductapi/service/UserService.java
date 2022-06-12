@@ -8,9 +8,10 @@ public interface UserService {
 
     void resign(Long userId);
 
-    void updatePassword(Long userId, String oldPw, String newPw, String checkPw);
-
     User getUser(Long userId);
 
     void updateUser(Long userId, String name);
+
+    void updatePassword(Long userId, String oldPw, String newPw, String checkPw);
+
 }

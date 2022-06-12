@@ -2,7 +2,7 @@ package com.ssg.ssgproductapi.controller;
 
 
 import com.ssg.ssgproductapi.domain.User;
-import com.ssg.ssgproductapi.dto.UserDTO;
+import com.ssg.ssgproductapi.dto.UserReqDTO;
 import com.ssg.ssgproductapi.security.dto.AuthUserDTO;
 import com.ssg.ssgproductapi.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * 컨트롤러는 따로 깃허브 위키에 자세하게 문서화 하였습니다.
+ */
 @RequestMapping("/api/user")
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping
-    public void signup(@RequestBody @Valid UserDTO.Signup signupDTO) {
+    public void signup(@RequestBody @Valid UserReqDTO.Signup signupDTO) {
 
         userService.signup(
                 signupDTO.getEmail(),
@@ -41,7 +44,7 @@ public class UserController {
 
     @PutMapping
     public void updateUser(@AuthenticationPrincipal AuthUserDTO authUser,
-                           @RequestBody UserDTO.Update updateDTO) {
+                           @RequestBody UserReqDTO.Update updateDTO) {
 
         userService.updateUser(
                 authUser.getId(),
@@ -51,7 +54,7 @@ public class UserController {
 
     @PutMapping("/password")
     public void updatePassword(@AuthenticationPrincipal AuthUserDTO authUser,
-                               @RequestBody @Valid UserDTO.Password passwordDTO) {
+                               @RequestBody @Valid UserReqDTO.Password passwordDTO) {
 
         userService.updatePassword(
                 authUser.getId(),

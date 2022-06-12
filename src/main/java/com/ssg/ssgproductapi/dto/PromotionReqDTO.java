@@ -1,10 +1,7 @@
 package com.ssg.ssgproductapi.dto;
 
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.*;
 import java.util.List;
@@ -15,6 +12,8 @@ public class PromotionReqDTO {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Register {
 
         @NotBlank(message = "프로모션명은 필수값 입니다.")
@@ -43,6 +42,8 @@ public class PromotionReqDTO {
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Apply {
 
         private List<Long> productIds;

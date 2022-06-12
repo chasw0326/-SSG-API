@@ -15,7 +15,7 @@ public class ProductRespDTO {
     @Builder
     public static class UserProduct {
 
-        private Long id;
+        private Long productId;
 
         private String name;
 
@@ -61,6 +61,28 @@ public class ProductRespDTO {
         private LocalDateTime endAt;
 
         private String username;
+    }
 
+    @Getter
+    @Builder
+    public static class MyProduct {
+
+        private Long productId;
+
+        private String name;
+
+        private String description;
+
+        private int fullPrice;
+
+        private int discountedPrice;
+
+        private LocalDateTime startedAt;
+
+        private LocalDateTime endAt;
+
+        private Long promotionId;
+
+        private String promotionName;
     }
 }

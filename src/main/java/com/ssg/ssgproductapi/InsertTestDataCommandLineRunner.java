@@ -83,6 +83,13 @@ public class InsertTestDataCommandLineRunner implements CommandLineRunner {
 
         productService.registerProduct(5L, "맥북프로", "M1Pro 16Inch", 4000000,
                 "일반회원", "2022-01-01 00:00:00","2022-12-31 23:59:59");
+
+        productService.registerProduct(3L, "IWC", "시계4", 310000000,
+                "기업회원", "2022-06-10 00:00:00","2022-06-30 23:59:59");
+
+        productService.registerProduct(3L, "까르띠에", "시계5", 150000000,
+                "기업회원", "2022-06-10 00:00:00","2022-06-30 23:59:59");
+
     }
 
     private void insertPromotions() {

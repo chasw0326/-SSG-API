@@ -1,7 +1,6 @@
 package com.ssg.ssgproductapi.controller;
 
 
-import com.ssg.ssgproductapi.domain.Promotion;
 import com.ssg.ssgproductapi.dto.PromotionReqDTO;
 import com.ssg.ssgproductapi.dto.PromotionRespDTO;
 import com.ssg.ssgproductapi.security.dto.AuthUserDTO;
@@ -14,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 컨트롤러는 따로 깃허브 위키에 자세하게 문서화 하였습니다.
+ */
 @RequestMapping("/api/promotion")
 @RestController
 @RequiredArgsConstructor

@@ -8,7 +8,8 @@ import javax.validation.Validator;
 import java.util.Set;
 
 /**
- * 엔티티 DB에 저장하기 전에 Validation 체크
+ * 컨트롤러에서도 @Valid로 유효성을 체크하지만<br>
+ * 엔티티로 변환 후 DB에 저장하기 전에도 Validation 체크
  */
 public class ValidateUtil {
 

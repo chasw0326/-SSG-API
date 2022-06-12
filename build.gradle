@@ -34,6 +34,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.json/json
     implementation group: 'org.json', name: 'json', version: '20160810'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    runtimeOnly 'com.h2database:h2'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
     testImplementation (group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.2'){
         exclude group: "com.vaadin.external.google", module: "android-json"
