@@ -1,4 +1,4 @@
-# -SSG-API
+# SSG-API
 
 Welcome to the -SSG-API wiki!
 
