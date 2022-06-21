@@ -13,6 +13,8 @@ Welcome to the -SSG-API wiki!
 - https://github.com/chasw0326/-SSG-API/wiki/%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%82%B4%EC%9A%A9
 
 ## 주안점
+- https://github.com/chasw0326/-SSG-API/wiki/%EC%83%81%ED%92%88%EC%A1%B0%ED%9A%8C-%EC%8B%9C-%EB%85%B8%EC%B6%9C%EB%90%98%EB%8A%94-%ED%94%84%EB%A1%9C%EB%AA%A8%EC%85%98
+
 - 상품의 수와 가격의 변동폭이 크다고 생각해서 캐시의 도움을 받기 힘들것이라 판단했고
 또한 상품목록API를 호출할때마다 매번 상품에 적용된 프로모션들중 가장 할인율이
 높은 프로모션을 찾는 과정이 추가된다면 시간복잡도가 (상품 수 × 각 상품에 적용된 프로모션 수) 가
