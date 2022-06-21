@@ -13,7 +13,7 @@ Welcome to the -SSG-API wiki!
 - https://github.com/chasw0326/-SSG-API/wiki/%ED%85%8C%EC%8A%A4%ED%8A%B8-%EB%82%B4%EC%9A%A9
 
 ## 주안점
-- https://github.com/chasw0326/-SSG-API/wiki/%EC%83%81%ED%92%88%EC%A1%B0%ED%9A%8C-%EC%8B%9C-%EB%85%B8%EC%B6%9C%EB%90%98%EB%8A%94-%ED%94%84%EB%A1%9C%EB%AA%A8%EC%85%98
+- ### 요약: 상품데이터 조회는 대량의 데이터를 조회하기 때문에 조인을 줄이고자 반정규화 진행
 
 - 상품의 수와 가격의 변동폭이 크다고 생각해서 캐시의 도움을 받기 힘들것이라 판단했고
 또한 상품목록API를 호출할때마다 매번 상품에 적용된 프로모션들중 가장 할인율이
@@ -38,6 +38,8 @@ ex) 삭제 된 프로모션을 FK로 갖고있던 상품들에대해 다음 적�
    - `적용된 프로모션의 유효기간이 지남` <br>
 ex) 상품테이블을 조회할 때 프로모션을 eager loading으로 같이 불러와서 날짜에 대한 체크를 진행하고
 날짜가 지났을 경우 다음 적합한 프로모션을 찾아서 갱신
+
+- 테이블로 자세한 설명: https://github.com/chasw0326/-SSG-API/wiki/%EC%83%81%ED%92%88%EC%A1%B0%ED%9A%8C-%EC%8B%9C-%EB%85%B8%EC%B6%9C%EB%90%98%EB%8A%94-%ED%94%84%EB%A1%9C%EB%AA%A8%EC%85%98
 
 
 ## 개발 환경
